@@ -16,7 +16,7 @@ redis-server  --daemonize yes
 cd /home/QMine_miningregex_core
 echo "In directory "
 pwd
-make server >> /var/log/qmine_c.out &
+make server && make runserver >> /var/log/qmine_c.out &
 
 cd /home/QMineWebApp
 echo "In directory "
