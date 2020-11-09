@@ -11,6 +11,7 @@ var usersRouter = require('./routes/users');
 var redisCon = require('./services/redisConnection.js');
 
 var app = express();
+var PORT = process.env.PORT || 5000;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -50,5 +51,5 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
-app.listen(5000);
-console.log("Server has started on port " + 5000);
+app.listen(PORT);
+console.log("Server has started on port " + PORT);
