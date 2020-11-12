@@ -45,10 +45,7 @@ async function invokeMine(req) {
         "status": 1
     };
     
-    // let movestatus = await shiftFileAndRename(tracefile);
-    // let abc = _.flattenDeep(Object.entries(requestObj));
-    // let redisSetResult = await redis.hmset("qmine", _.flattenDeep(Object.entries(requestObj)));
-    let redisSetResult = await redis.hmset("qmine", requestObj);
+    await redis.hmset("qmine", requestObj);
     
     return {'requestId' : requestObj.requestId};
 }
@@ -97,6 +94,29 @@ function customJSONParser(resultObj) {
     return parsedObj;
 }
 
+function changeToPatternMatch(resultObj) {
+    var obj = {
+        "count":0,
+        "match":[]
+    };
+    
+    obj.count = _.size(resultObj);
+    for (var i=0; i<_.size(resultObj);i++) {
+        
+        let _pattern = _.keys(resultObj[i])[0];
+        let _value = _.values(resultObj[i])[0];
+        // _value = _.pullAll(_value, _.size(_value)-1); // remove the last Quant. Ideally, this should not be present. Must be fixed in C-engine accordingly.
+        
+        var _obj = {
+            "pattern" : _pattern,
+            "value": _value
+        }
+        obj.match.push(_obj);
+    }
+    
+    return obj;
+}
+
 async function getResult(requestId) {
     redis = global.redisClient;
     var result = await getObjFromRedis();
@@ -115,7 +135,8 @@ async function getResult(requestId) {
         noheader: true
     }).fromFile(result.output_file_path);
     
-    var resultJSONParsed = customJSONParser(resultJSON);
+    var _resultJSONParsed = customJSONParser(resultJSON);
+    var resultJSONParsed = changeToPatternMatch(_resultJSONParsed);
     
     console.log(resultJSONParsed);
     return resultJSONParsed;

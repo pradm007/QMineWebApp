@@ -1,10 +1,12 @@
 redis = require('redis');
-/* Values are hard-coded for this example, it's usually best to bring these in via file or environment variable for production */
+
+const _PORT = '6379';
+const _HOST = '127.0.0.1';
 
 function connectRedis() {
     client = redis.createClient({
-        port: 6379,
-        host: '127.0.0.1',
+        port: _PORT,
+        host: _HOST,
         retry_strategy: function(options) {
             if (options.error && options.error.code === "ECONNREFUSED") {
               // End reconnecting on a specific error and flush all commands with
@@ -25,6 +27,7 @@ function connectRedis() {
           },
     });
     
+    console.log("Redis connected successfully");
     return client;
 }
 
