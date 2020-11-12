@@ -1,0 +1,1 @@
+web: chmod u+x /home/QMineWebApp/start_script.sh && ./home/QMineWebApp/start_script.sh

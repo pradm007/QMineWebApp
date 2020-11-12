@@ -106,7 +106,12 @@ function changeToPatternMatch(resultObj) {
         let _pattern = _.keys(resultObj[i])[0];
         let _value = _.values(resultObj[i])[0];
         // _value = _.pullAll(_value, _.size(_value)-1); // remove the last Quant. Ideally, this should not be present. Must be fixed in C-engine accordingly.
-        
+        for(var j=0; j<_.size(_value);j++){
+            for(var k=0;k<_.size(_value[j]);k++){
+                _value[j][k] = parseInt(_value[j][k],10);
+            }
+        }
+    
         var _obj = {
             "pattern" : _pattern,
             "value": _value
